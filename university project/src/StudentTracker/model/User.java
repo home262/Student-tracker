@@ -1,4 +1,4 @@
-package StudentTracker.model;
+package studenttracker.model;
 
 public abstract class User {
     //--------FIELDS FOR USER DATA--------
@@ -13,7 +13,7 @@ public abstract class User {
     public abstract boolean login();
     public abstract void logout();
     public abstract String getInfo();
-    public abstract boolean validate();
+    public abstract boolean validateEmail();
 
     //--------CONSTRUCTOR TO INITIALIZE DATA----------
     public User(int userId, String name, String email, String password, String phone, String role) {
@@ -37,8 +37,7 @@ public abstract class User {
     public int getUserId() {return userId;}
     public String getName() {return name;}
     public String getEmail() {return email;}
-    public String getPassword() {return password;}
     public String getPhone() {return phone;}
     public String getRole() {return role;}
-
+    
 }
