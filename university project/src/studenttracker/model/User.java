@@ -16,6 +16,7 @@ public abstract class User {
     public abstract boolean validateEmail();
 
     //--------CONSTRUCTOR TO INITIALIZE DATA----------
+    public User() {}
     public User(int userId, String name, String email, String password, String phone, String role) {
         this.userId = userId;
         this.name = name;
