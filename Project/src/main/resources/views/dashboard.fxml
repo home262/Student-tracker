@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="studenttracker.controller.DashboardController"
+            stylesheets="@/css/dashboard.css"
+            styleClass="root">
+
+    <!-- =========================
+         LEFT SIDEBAR
+    ========================== -->
+
+    <left>
+        <VBox styleClass="sidebar">
+
+            <!-- Logo -->
+            <VBox spacing="6" alignment="CENTER_LEFT">
+                <Label text="STUDENT"
+                       styleClass="logo-top"/>
+
+                <Label text="TRACKER"
+                       styleClass="logo-bottom"/>
+            </VBox>
+
+            <!-- Navigation -->
+            <VBox spacing="10" VBox.vgrow="ALWAYS">
+
+                <Button text="🏠  Dashboard"
+                        styleClass="nav-btn"/>
+
+                <Button text="👨‍🎓  Students"
+                        styleClass="nav-btn"/>
+
+                <Button text="📅  Attendance"
+                        styleClass="nav-btn"/>
+
+                <Button text="📊  Reports"
+                        styleClass="nav-btn"/>
+
+                <Button text="🤖  AI Insights"
+                        styleClass="nav-btn"/>
+
+                <Button text="⚙️  Settings"
+                        styleClass="nav-btn"/>
+
+            </VBox>
+
+            <!-- Bottom Profile -->
+            <HBox styleClass="profile-box"
+                  alignment="CENTER_LEFT"
+                  spacing="12">
+
+                <StackPane styleClass="profile-avatar">
+                    <Label text="Y"
+                           styleClass="avatar-text"/>
+                </StackPane>
+
+                <VBox spacing="2">
+                    <Label text="Yousef"
+                           styleClass="profile-name"/>
+
+                    <Label text="Administrator"
+                           styleClass="profile-role"/>
+                </VBox>
+
+            </HBox>
+
+        </VBox>
+    </left>
+
+    <!-- =========================
+         TOP HEADER
+    ========================== -->
+
+    <top>
+
+        <HBox styleClass="topbar"
+              alignment="CENTER_LEFT"
+              spacing="20">
+
+            <VBox spacing="3">
+
+                <Label text="Dashboard"
+                       styleClass="page-title"/>
+
+                <Label text="Welcome back, manage your academic workspace."
+                       styleClass="page-subtitle"/>
+
+            </VBox>
+
+            <Region HBox.hgrow="ALWAYS"/>
+
+            <!-- Search -->
+            <TextField promptText="Search..."
+                       styleClass="search-field"/>
+
+            <!-- Notifications -->
+            <Button text="🔔"
+                    styleClass="icon-btn"/>
+
+        </HBox>
+
+    </top>
+
+    <!-- =========================
+         CENTER CONTENT
+    ========================== -->
+
+    <center>
+
+        <ScrollPane fitToWidth="true"
+                    styleClass="main-scroll">
+
+            <VBox spacing="24"
+                  styleClass="content-area">
+
+                <!-- Statistics Cards -->
+                <HBox spacing="20">
+
+                    <VBox styleClass="stat-card"
+                          HBox.hgrow="ALWAYS"
+                          spacing="10">
+
+                        <Label text="Total Students"
+                               styleClass="stat-title"/>
+
+                        <Label text="1,284"
+                               styleClass="stat-number"/>
+
+                        <Label text="+12% this month"
+                               styleClass="stat-growth"/>
+                    </VBox>
+
+                    <VBox styleClass="stat-card"
+                          HBox.hgrow="ALWAYS"
+                          spacing="10">
+
+                        <Label text="Attendance Rate"
+                               styleClass="stat-title"/>
+
+                        <Label text="92%"
+                               styleClass="stat-number"/>
+
+                        <Label text="+4% this week"
+                               styleClass="stat-growth"/>
+                    </VBox>
+
+                    <VBox styleClass="stat-card"
+                          HBox.hgrow="ALWAYS"
+                          spacing="10">
+
+                        <Label text="Reports Generated"
+                               styleClass="stat-title"/>
+
+                        <Label text="348"
+                               styleClass="stat-number"/>
+
+                        <Label text="+18 today"
+                               styleClass="stat-growth"/>
+                    </VBox>
+
+                </HBox>
+
+                <!-- Main Content Grid -->
+                <HBox spacing="20">
+
+                    <!-- Recent Students -->
+                    <VBox styleClass="panel"
+                          spacing="18"
+                          HBox.hgrow="ALWAYS">
+
+                        <Label text="Recent Students"
+                               styleClass="panel-title"/>
+
+                        <VBox spacing="12">
+
+                            <HBox styleClass="student-row"
+                                  alignment="CENTER_LEFT">
+
+                                <Label text="Ahmed Mohamed"
+                                       styleClass="student-name"/>
+
+                                <Region HBox.hgrow="ALWAYS"/>
+
+                                <Label text="Grade A"
+                                       styleClass="student-grade"/>
+                            </HBox>
+
+                            <HBox styleClass="student-row"
+                                  alignment="CENTER_LEFT">
+
+                                <Label text="Sara Ali"
+                                       styleClass="student-name"/>
+
+                                <Region HBox.hgrow="ALWAYS"/>
+
+                                <Label text="Grade B+"
+                                       styleClass="student-grade"/>
+                            </HBox>
+
+                            <HBox styleClass="student-row"
+                                  alignment="CENTER_LEFT">
+
+                                <Label text="Omar Hassan"
+                                       styleClass="student-name"/>
+
+                                <Region HBox.hgrow="ALWAYS"/>
+
+                                <Label text="Grade A+"
+                                       styleClass="student-grade"/>
+                            </HBox>
+
+                        </VBox>
+
+                    </VBox>
+
+                    <!-- Quick Actions -->
+                    <VBox styleClass="panel"
+                          spacing="18"
+                          prefWidth="300">
+
+                        <Label text="Quick Actions"
+                               styleClass="panel-title"/>
+
+                        <Button text="➕ Add Student"
+                                styleClass="action-btn"/>
+
+                        <Button text="📅 Take Attendance"
+                                styleClass="action-btn"/>
+
+                        <Button text="📊 Generate Report"
+                                styleClass="action-btn"/>
+
+                        <Button text="🤖 AI Summary"
+                                styleClass="action-btn"/>
+
+                    </VBox>
+
+                </HBox>
+
+            </VBox>
+
+        </ScrollPane>
+
+    </center>
+
+</BorderPane>
