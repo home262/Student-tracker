@@ -25,6 +25,7 @@ public class Main extends Application {
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.setTitle("Student Tracker");
+        stage.setMaximized(true);
         stage.show();
     }
 }
