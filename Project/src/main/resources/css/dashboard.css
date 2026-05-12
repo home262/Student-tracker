@@ -1,0 +1,340 @@
+.root {
+    -fx-background-color: #0f1115;
+
+    -fx-font-family: "Inter";
+}
+
+
+.sidebar {
+
+    -fx-background-color: #15181d;
+
+    -fx-padding: 30 20 24 20;
+
+    -fx-pref-width: 260;
+
+    -fx-spacing: 28;
+
+    -fx-border-color: rgba(255,255,255,0.04);
+
+    -fx-border-width: 0 1 0 0;
+}
+
+
+.logo-top {
+
+    -fx-text-fill: white;
+
+    -fx-font-size: 28px;
+
+    -fx-font-weight: 800;
+}
+
+.logo-bottom {
+
+    -fx-text-fill: #5865f2;
+
+    -fx-font-size: 28px;
+
+    -fx-font-weight: 800;
+}
+
+
+.nav-btn {
+
+    -fx-background-color: transparent;
+
+    -fx-text-fill: #aeb4bc;
+
+    -fx-font-size: 15px;
+
+    -fx-font-weight: 600;
+
+    -fx-alignment: CENTER_LEFT;
+
+    -fx-pref-height: 48;
+
+    -fx-background-radius: 12;
+
+    -fx-cursor: hand;
+
+    -fx-padding: 0 0 0 18;
+}
+
+.nav-btn:hover {
+
+    -fx-background-color: rgba(88,101,242,0.15);
+
+    -fx-text-fill: white;
+}
+
+
+.profile-box {
+
+    -fx-background-color: rgba(255,255,255,0.03);
+
+    -fx-background-radius: 16;
+
+    -fx-padding: 14;
+}
+
+.profile-avatar {
+
+    -fx-background-color:
+        linear-gradient(to bottom right, #5865f2, #7280ff);
+
+    -fx-background-radius: 999;
+
+    -fx-min-width: 48;
+    -fx-min-height: 48;
+}
+
+.avatar-text {
+
+    -fx-text-fill: white;
+
+    -fx-font-size: 18px;
+
+    -fx-font-weight: bold;
+}
+
+.profile-name {
+
+    -fx-text-fill: white;
+
+    -fx-font-size: 14px;
+
+    -fx-font-weight: bold;
+}
+
+.profile-role {
+
+    -fx-text-fill: #9098a1;
+
+    -fx-font-size: 12px;
+}
+
+
+.topbar {
+
+    -fx-padding: 24 32 24 32;
+
+    -fx-background-color: #11141a;
+
+    -fx-border-color: rgba(255,255,255,0.04);
+
+    -fx-border-width: 0 0 1 0;
+}
+
+.page-title {
+
+    -fx-text-fill: white;
+
+    -fx-font-size: 30px;
+
+    -fx-font-weight: 800;
+}
+
+.page-subtitle {
+
+    -fx-text-fill: #9098a1;
+
+    -fx-font-size: 14px;
+}
+
+.search-field {
+
+    -fx-background-color: #1a1d24;
+
+    -fx-text-fill: white;
+
+    -fx-background-radius: 14;
+
+    -fx-border-radius: 14;
+
+    -fx-border-color: transparent;
+
+    -fx-pref-width: 260;
+
+    -fx-pref-height: 44;
+
+    -fx-padding: 0 16 0 16;
+
+    -fx-prompt-text-fill: #6d7680;
+}
+
+.search-field:focused {
+
+    -fx-border-color: #5865f2;
+
+    -fx-effect:
+        dropshadow(
+            gaussian,
+            rgba(88,101,242,0.3),
+            14,
+            0.2,
+            0,
+            0
+        );
+}
+
+.icon-btn {
+
+    -fx-background-color: #1a1d24;
+
+    -fx-text-fill: white;
+
+    -fx-background-radius: 14;
+
+    -fx-pref-width: 44;
+
+    -fx-pref-height: 44;
+
+    -fx-font-size: 16px;
+
+    -fx-cursor: hand;
+}
+
+.icon-btn:hover {
+
+    -fx-background-color: #232834;
+}
+
+.main-scroll {
+
+    -fx-background: transparent;
+
+    -fx-background-color: transparent;
+}
+
+.main-scroll > .viewport {
+
+    -fx-background-color: transparent;
+}
+
+.content-area {
+
+    -fx-padding: 32;
+}
+
+.stat-card {
+
+    -fx-background-color: #181c23;
+
+    -fx-background-radius: 22;
+
+    -fx-padding: 24;
+
+    -fx-effect:
+        dropshadow(
+            gaussian,
+            rgba(0,0,0,0.25),
+            20,
+            0.15,
+            0,
+            4
+        );
+}
+
+.stat-title {
+
+    -fx-text-fill: #9098a1;
+
+    -fx-font-size: 14px;
+}
+
+.stat-number {
+
+    -fx-text-fill: white;
+
+    -fx-font-size: 38px;
+
+    -fx-font-weight: 800;
+}
+
+.stat-growth {
+
+    -fx-text-fill: #4ade80;
+
+    -fx-font-size: 13px;
+
+    -fx-font-weight: bold;
+}
+
+.panel {
+
+    -fx-background-color: #181c23;
+
+    -fx-background-radius: 22;
+
+    -fx-padding: 24;
+}
+
+.panel-title {
+
+    -fx-text-fill: white;
+
+    -fx-font-size: 20px;
+
+    -fx-font-weight: 700;
+}
+
+.student-row {
+
+    -fx-background-color: rgba(255,255,255,0.03);
+
+    -fx-background-radius: 14;
+
+    -fx-padding: 16;
+}
+
+.student-name {
+
+    -fx-text-fill: white;
+
+    -fx-font-size: 14px;
+
+    -fx-font-weight: 600;
+}
+
+.student-grade {
+
+    -fx-text-fill: #5865f2;
+
+    -fx-font-size: 13px;
+
+    -fx-font-weight: bold;
+}
+.action-btn {
+
+    -fx-background-color:
+        linear-gradient(to bottom, #6d7cff, #5865f2);
+
+    -fx-text-fill: white;
+
+    -fx-font-size: 14px;
+
+    -fx-font-weight: bold;
+
+    -fx-background-radius: 14;
+
+    -fx-pref-height: 46;
+
+    -fx-cursor: hand;
+}
+
+.action-btn:hover {
+
+    -fx-background-color:
+        linear-gradient(to bottom, #7b88ff, #6572ff);
+
+    -fx-effect:
+        dropshadow(
+            gaussian,
+            rgba(88,101,242,0.35),
+            18,
+            0.2,
+            0,
+            4
+        );
+}
