@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<StackPane xmlns:fx="http://javafx.com/fxml"
+           fx:controller="studenttracker.controller.LoginController"
+           stylesheets="@/css/login.css"
+           style="-fx-background-color: #313338;"
+           prefWidth="520" prefHeight="520">
+
+    <VBox styleClass="card" alignment="CENTER" spacing="0"
+          maxWidth="440" maxHeight="520">
+
+        <!-- Avatar / Icon -->
+        <StackPane styleClass="avatar-circle" alignment="CENTER">
+            <ImageView fitWidth="48" fitHeight="48" preserveRatio="true">
+                <image>
+                    <Image url="@/icons/boy.png"/>
+                </image>
+            </ImageView>
+        </StackPane>
+
+        <!-- Title -->
+        <Label text="Welcome back!" styleClass="card-title"/>
+        <Label text="We're so excited to see you again!" styleClass="card-sub"/>
+
+        <!-- Email Field -->
+        <VBox spacing="6" styleClass="field-wrap">
+            <Label text="EMAIL OR PHONE NUMBER" styleClass="field-label"/>
+            <TextField fx:id="emailField" styleClass="field-input"/>
+        </VBox>
+
+        <!-- Password Field -->
+        <VBox spacing="6" styleClass="field-wrap">
+            <Label text="PASSWORD" styleClass="field-label"/>
+            <PasswordField fx:id="passwordField" styleClass="field-input"/>
+        </VBox>
+
+        <!-- Forgot Password -->
+        <Label text="Forgot your password?" styleClass="forgot-link"
+               onMouseClicked="#handleForgotPassword"/>
+
+        <!-- Login Button -->
+        <Button text="Log In" styleClass="login-btn"
+                onAction="#handleLogin" maxWidth="Infinity"/>
+
+        <!-- Register row -->
+        <HBox spacing="4">
+            <Label text="Need an account?" styleClass="register-muted"/>
+            <Label text="Register" styleClass="register-link"
+                   onMouseClicked="#handleRegister"/>
+        </HBox>
+
+        <VBox.margin>
+            <Insets top="16"/>
+        </VBox.margin>
+
+    </VBox>
+</StackPane>
