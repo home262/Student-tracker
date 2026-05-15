@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.VBox?>
+
+<ScrollPane fitToWidth="true" stylesheets="@../css/dashboard.css"
+            style="-fx-background-color: transparent; -fx-background: #13110E;"
+            xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="studenttracker.controller.ReportsController">
+    <content>
+        <VBox spacing="30">
+            <padding><Insets top="40" bottom="40" left="40" right="40"/></padding>
+
+            <!-- Header -->
+            <VBox spacing="5">
+                <Label style="-fx-font-size: 10px; -fx-text-fill: #6b645c; -fx-font-weight: 600;" text="THE CODEX" />
+                <Label styleClass="title-fantasy" text="Scholar's Reports" />
+                <Label styleClass="subtitle-fantasy" text="Detailed scrolls outlining your progress through the sanctum." />
+            </VBox>
+
+            <VBox spacing="20" styleClass="card">
+                <children>
+                    <Label styleClass="header-label" text="REPORT GENERATION" />
+                    <Label fx:id="studentNameLabel" style="-fx-text-fill: white; -fx-font-size: 18px;" text="Student Name" />
+                    <Label style="-fx-text-fill: #a8a29e; -fx-font-size: 14px;" text="Full semester reports are currently being forged by the scribes. Check back soon." wrapText="true" />
+                </children>
+            </VBox>
+        </VBox>
+    </content>
+</ScrollPane>
