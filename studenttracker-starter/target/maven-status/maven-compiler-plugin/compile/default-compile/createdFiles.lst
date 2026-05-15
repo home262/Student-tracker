@@ -1,0 +1,6 @@
+studenttracker\controller\AdvisorController.class
+studenttracker\controller\ReportsController.class
+studenttracker\App.class
+studenttracker\service\AIAdvisorService.class
+studenttracker\controller\MainController.class
+studenttracker\controller\StudentAware.class
