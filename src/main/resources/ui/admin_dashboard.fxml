@@ -1,0 +1,390 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Circle?>
+
+<BorderPane styleClass="root" stylesheets="@../css/dashboard.css"
+            xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="studenttracker.controller.AdminDashboardController">
+
+    <!-- SIDEBAR -->
+    <left>
+        <VBox prefWidth="240" styleClass="sidebar">
+            <padding><Insets top="20" bottom="20"/></padding>
+
+            <VBox style="-fx-padding: 0 0 0 20;">
+                <Label style="-fx-font-family: 'Cinzel'; -fx-font-weight: 700; -fx-font-size: 18px; -fx-text-fill: #d4af37;" text="Scholar's Sanctum" />
+                <Label style="-fx-font-family: 'Cinzel'; -fx-font-size: 10px; -fx-text-fill: #8b847a;" text="Warden's Keep" />
+            </VBox>
+
+            <Region prefHeight="20" />
+            <Label style="-fx-padding: 0 0 4 20; -fx-font-size: 10px; -fx-text-fill: #6b645c; -fx-font-weight: 600;" text="THE REGISTRY" />
+            <Button fx:id="navAll"  maxWidth="1.7976931348623157E308" mnemonicParsing="false" styleClass="nav-button, nav-button-active" text="  📜  All Scholars"   onAction="#showAllStudents" />
+            <Button fx:id="navAdd"  maxWidth="1.7976931348623157E308" mnemonicParsing="false" styleClass="nav-button" text="  ✦  Enroll Scholar"  onAction="#showAddForm" />
+
+            <Region prefHeight="8" />
+            <Label style="-fx-padding: 0 0 4 20; -fx-font-size: 10px; -fx-text-fill: #6b645c; -fx-font-weight: 600;" text="MANAGEMENT" />
+            <Button fx:id="navCourses"    maxWidth="1.7976931348623157E308" mnemonicParsing="false" styleClass="nav-button" text="  📚  Manage Courses"    onAction="#showCourses" />
+            <Button fx:id="navGrades"     maxWidth="1.7976931348623157E308" mnemonicParsing="false" styleClass="nav-button" text="  ⚔  Manage Grades"     onAction="#showGrades" />
+            <Button fx:id="navAttendance" maxWidth="1.7976931348623157E308" mnemonicParsing="false" styleClass="nav-button" text="  🏰  Manage Attendance" onAction="#showAttendance" />
+            <Button fx:id="navEnrollments" maxWidth="1.7976931348623157E308" mnemonicParsing="false" styleClass="nav-button" text="  🔗  Course Enrollments" onAction="#showEnrollments" />
+
+            <Region prefHeight="8" />
+            <Label style="-fx-padding: 0 0 4 20; -fx-font-size: 10px; -fx-text-fill: #6b645c; -fx-font-weight: 600;" text="REPORTS" />
+            <Button fx:id="navAdminReports" maxWidth="1.7976931348623157E308" mnemonicParsing="false" styleClass="nav-button" text="  📊  Scholar Reports"  onAction="#showAdminReports" />
+
+            <Region VBox.vgrow="ALWAYS" />
+
+            <!-- Logout Button — same style as student sidebar -->
+            <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false"
+                    styleClass="nav-button-logout" text="  Logout" onAction="#handleLogout">
+                <graphic><ImageView fx:id="iconLogoutAdmin" fitHeight="16" fitWidth="16" pickOnBounds="true" preserveRatio="true" /></graphic>
+            </Button>
+
+            <HBox alignment="CENTER_LEFT" spacing="10" styleClass="profile-section">
+                <StackPane prefHeight="40" prefWidth="40">
+                    <Circle fill="#8b0000" radius="20" />
+                    <Label style="-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px;" text="W" />
+                </StackPane>
+                <VBox spacing="2">
+                    <Label fx:id="adminNameLabel" style="-fx-text-fill: #ffffff; -fx-font-weight: bold; -fx-font-size: 13px;" text="Warden" />
+                    <Label style="-fx-text-fill: #8b847a; -fx-font-size: 11px;" text="Administrator" />
+                </VBox>
+            </HBox>
+        </VBox>
+    </left>
+
+    <!-- MAIN CONTENT -->
+    <center>
+        <StackPane fx:id="contentArea" style="-fx-background-color: #13110E;">
+
+            <!-- ═══ ALL STUDENTS ═══ -->
+            <VBox fx:id="allStudentsView" spacing="0" style="-fx-padding: 30px;">
+                <HBox alignment="CENTER_LEFT" spacing="16">
+                    <VBox spacing="4" HBox.hgrow="ALWAYS">
+                        <Label style="-fx-font-family: 'Cinzel'; -fx-font-weight: 700; -fx-font-size: 22px; -fx-text-fill: #d4af37;" text="Scholar Registry" />
+                        <Label style="-fx-text-fill: #8b847a; -fx-font-size: 13px;" text="All enrolled scholars in the Sanctum" />
+                    </VBox>
+                    <TextField fx:id="searchField" promptText="Search by name, ID, or department…"
+                               style="-fx-background-color: #1a1614; -fx-border-color: #2d251f; -fx-border-radius: 5; -fx-background-radius: 5; -fx-text-fill: #a8a29e; -fx-prompt-text-fill: #4a4340; -fx-padding: 8 12; -fx-font-size: 13px; -fx-pref-width: 240px;"
+                               onKeyReleased="#handleSearch" />
+                    <Button text="+ Enroll Scholar" styleClass="login-button" onAction="#showAddForm" mnemonicParsing="false" style="-fx-padding: 8 18; -fx-font-size: 13px;" />
+                </HBox>
+                <Region prefHeight="16" />
+                <HBox spacing="16">
+                    <VBox styleClass="card" HBox.hgrow="ALWAYS" alignment="CENTER" spacing="4">
+                        <Label fx:id="totalCountLabel" styleClass="stat-value" text="0" />
+                        <Label styleClass="stat-label" text="Total Scholars" />
+                    </VBox>
+                    <VBox styleClass="card" HBox.hgrow="ALWAYS" alignment="CENTER" spacing="4">
+                        <Label fx:id="deptCountLabel" styleClass="stat-value" text="0" />
+                        <Label styleClass="stat-label" text="Departments" />
+                    </VBox>
+                    <VBox styleClass="card" HBox.hgrow="ALWAYS" alignment="CENTER" spacing="4">
+                        <Label fx:id="yearCountLabel" styleClass="stat-value" text="0" />
+                        <Label styleClass="stat-label" text="Enrollment Years" />
+                    </VBox>
+                </HBox>
+                <Region prefHeight="16" />
+                <TableView fx:id="studentsTable" styleClass="table-view" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="colId"    text="Student ID"  prefWidth="100" />
+                        <TableColumn fx:id="colName"  text="Name"        prefWidth="180" />
+                        <TableColumn fx:id="colEmail" text="Email"       prefWidth="200" />
+                        <TableColumn fx:id="colDept"  text="Department"  prefWidth="160" />
+                        <TableColumn fx:id="colYear"  text="Enrolled"    prefWidth="90" />
+                        <TableColumn fx:id="colPhone" text="Phone"       prefWidth="120" />
+                    </columns>
+                    <placeholder><Label text="No scholars found." /></placeholder>
+                </TableView>
+                <Region prefHeight="12" />
+                <HBox alignment="CENTER_RIGHT" spacing="12">
+                    <Label fx:id="statusLabel" style="-fx-text-fill: #8b847a; -fx-font-size: 12px;" text="" />
+                    <Region HBox.hgrow="ALWAYS" />
+                    <Button text="Delete Selected" mnemonicParsing="false" onAction="#handleDelete"
+                            style="-fx-background-color: #4a1a1a; -fx-border-color: #8b2020; -fx-border-radius: 5; -fx-background-radius: 5; -fx-text-fill: #e66777; -fx-font-size: 13px; -fx-padding: 8 18; -fx-cursor: hand;" />
+                </HBox>
+            </VBox>
+
+            <!-- ═══ ADD STUDENT ═══ -->
+            <VBox fx:id="addStudentView" spacing="0" visible="false" managed="false"
+                  style="-fx-padding: 30px; -fx-max-width: 560px;" alignment="TOP_CENTER">
+                <Label style="-fx-font-family: 'Cinzel'; -fx-font-weight: 700; -fx-font-size: 22px; -fx-text-fill: #d4af37;" text="Enroll New Scholar" />
+                <Label style="-fx-text-fill: #8b847a; -fx-font-size: 13px; -fx-padding: 4 0 0 0;" text="Add a new student to the Sanctum registry" />
+                <Region prefHeight="24" />
+                <VBox styleClass="card" spacing="16">
+                    <HBox spacing="16">
+                        <VBox spacing="6" HBox.hgrow="ALWAYS">
+                            <Label styleClass="login-label" text="Student ID" />
+                            <TextField fx:id="addIdField" styleClass="login-field" promptText="e.g. S201" maxWidth="1.7976931348623157E308" />
+                        </VBox>
+                        <VBox spacing="6" HBox.hgrow="ALWAYS">
+                            <Label styleClass="login-label" text="Full Name" />
+                            <TextField fx:id="addNameField" styleClass="login-field" promptText="Scholar's full name" maxWidth="1.7976931348623157E308" />
+                        </VBox>
+                    </HBox>
+                    <HBox spacing="16">
+                        <VBox spacing="6" HBox.hgrow="ALWAYS">
+                            <Label styleClass="login-label" text="Email" />
+                            <TextField fx:id="addEmailField" styleClass="login-field" promptText="scholar@sanctum.edu" maxWidth="1.7976931348623157E308" />
+                        </VBox>
+                        <VBox spacing="6" HBox.hgrow="ALWAYS">
+                            <Label styleClass="login-label" text="Password" />
+                            <PasswordField fx:id="addPasswordField" styleClass="login-field" promptText="Secret key" maxWidth="1.7976931348623157E308" />
+                        </VBox>
+                    </HBox>
+                    <HBox spacing="16">
+                        <VBox spacing="6" HBox.hgrow="ALWAYS">
+                            <Label styleClass="login-label" text="Phone" />
+                            <TextField fx:id="addPhoneField" styleClass="login-field" promptText="01xxxxxxxxx" maxWidth="1.7976931348623157E308" />
+                        </VBox>
+                        <VBox spacing="6" HBox.hgrow="ALWAYS">
+                            <Label styleClass="login-label" text="Enrollment Year" />
+                            <TextField fx:id="addYearField" styleClass="login-field" promptText="e.g. 2025" maxWidth="1.7976931348623157E308" />
+                        </VBox>
+                    </HBox>
+                    <VBox spacing="6">
+                        <Label styleClass="login-label" text="Department" />
+                        <ComboBox fx:id="addDeptField" maxWidth="1.7976931348623157E308"
+                                  style="-fx-background-color: #13110E; -fx-border-color: #2d251f; -fx-border-radius: 4; -fx-text-fill: #a8a29e; -fx-font-size: 13px;" />
+                    </VBox>
+                </VBox>
+                <Region prefHeight="12" />
+                <Label fx:id="formErrorLabel" style="-fx-text-fill: #e66777; -fx-font-size: 12px;" text="" />
+                <Region prefHeight="8" />
+                <HBox spacing="12">
+                    <Button text="Cancel" mnemonicParsing="false" onAction="#showAllStudents" styleClass="action-button" HBox.hgrow="ALWAYS" maxWidth="1.7976931348623157E308" style="-fx-padding: 10;" />
+                    <Button text="Enroll Scholar" mnemonicParsing="false" onAction="#handleAddStudent" styleClass="login-button" HBox.hgrow="ALWAYS" maxWidth="1.7976931348623157E308" style="-fx-padding: 10;" />
+                </HBox>
+            </VBox>
+
+            <!-- ═══ COURSES MANAGEMENT ═══ -->
+            <VBox fx:id="coursesView" spacing="0" visible="false" managed="false" style="-fx-padding: 30px;">
+                <Label style="-fx-font-family: 'Cinzel'; -fx-font-weight: 700; -fx-font-size: 22px; -fx-text-fill: #d4af37;" text="Course Registry" />
+                <Label style="-fx-text-fill: #8b847a; -fx-font-size: 13px; -fx-padding: 4 0 16 0;" text="Manage all courses available in the Sanctum" />
+
+                <TableView fx:id="coursesTable" styleClass="table-view" VBox.vgrow="ALWAYS" style="-fx-pref-height: 320px;">
+                    <columns>
+                        <TableColumn fx:id="cColId"         text="Course ID"   prefWidth="100" />
+                        <TableColumn fx:id="cColName"       text="Course Name" prefWidth="220" />
+                        <TableColumn fx:id="cColInstructor" text="Instructor"  prefWidth="180" />
+                        <TableColumn fx:id="cColCredits"    text="Credits"     prefWidth="70" />
+                        <TableColumn fx:id="cColSemester"   text="Semester"    prefWidth="110" />
+                    </columns>
+                    <placeholder><Label text="No courses in the Sanctum yet." /></placeholder>
+                </TableView>
+
+                <Region prefHeight="16" />
+                <VBox styleClass="card" spacing="14">
+                    <Label style="-fx-font-size: 10px; -fx-text-fill: #6b645c; -fx-font-weight: 600;" text="ADD NEW COURSE" />
+                    <HBox spacing="12">
+                        <VBox spacing="5" HBox.hgrow="ALWAYS">
+                            <Label styleClass="login-label" text="Course ID" />
+                            <TextField fx:id="newCourseIdField" styleClass="login-field" promptText="e.g. CS501" maxWidth="1.7976931348623157E308" />
+                        </VBox>
+                        <VBox spacing="5" HBox.hgrow="ALWAYS">
+                            <Label styleClass="login-label" text="Course Name" />
+                            <TextField fx:id="newCourseNameField" styleClass="login-field" promptText="e.g. Advanced AI" maxWidth="1.7976931348623157E308" />
+                        </VBox>
+                        <VBox spacing="5" HBox.hgrow="ALWAYS">
+                            <Label styleClass="login-label" text="Instructor" />
+                            <TextField fx:id="newInstructorField" styleClass="login-field" promptText="Dr. Name" maxWidth="1.7976931348623157E308" />
+                        </VBox>
+                        <VBox spacing="5" style="-fx-min-width: 90;">
+                            <Label styleClass="login-label" text="Credits" />
+                            <ComboBox fx:id="newCreditsCombo" style="-fx-background-color: #13110E; -fx-border-color: #2d251f; -fx-border-radius: 4; -fx-text-fill: #a8a29e; -fx-font-size: 13px; -fx-min-width: 80;" />
+                        </VBox>
+                        <VBox spacing="5" HBox.hgrow="ALWAYS">
+                            <Label styleClass="login-label" text="Semester" />
+                            <TextField fx:id="newSemesterField" styleClass="login-field" promptText="Spring 2026" maxWidth="1.7976931348623157E308" />
+                        </VBox>
+                    </HBox>
+                    <HBox alignment="CENTER_RIGHT" spacing="12">
+                        <Label fx:id="coursesStatusLabel" style="-fx-text-fill: #6dbf8a; -fx-font-size: 12px;" text="" />
+                        <Region HBox.hgrow="ALWAYS" />
+                        <Button text="Delete Selected" mnemonicParsing="false" onAction="#handleDeleteCourse"
+                                style="-fx-background-color: #4a1a1a; -fx-border-color: #8b2020; -fx-border-radius: 5; -fx-background-radius: 5; -fx-text-fill: #e66777; -fx-font-size: 13px; -fx-padding: 8 16; -fx-cursor: hand;" />
+                        <Button text="Add Course" mnemonicParsing="false" onAction="#handleAddCourse"
+                                styleClass="login-button" style="-fx-padding: 8 20; -fx-font-size: 13px;" />
+                    </HBox>
+                </VBox>
+            </VBox>
+
+            <!-- ═══ GRADES MANAGEMENT ═══ -->
+            <VBox fx:id="gradesView" spacing="0" visible="false" managed="false" style="-fx-padding: 30px;">
+                <Label style="-fx-font-family: 'Cinzel'; -fx-font-weight: 700; -fx-font-size: 22px; -fx-text-fill: #d4af37;" text="Battle Scores" />
+                <Label style="-fx-text-fill: #8b847a; -fx-font-size: 13px; -fx-padding: 4 0 16 0;" text="Manage grades for each scholar" />
+
+                <HBox alignment="CENTER_LEFT" spacing="12" style="-fx-padding: 0 0 14 0;">
+                    <Label style="-fx-text-fill: #a8a29e; -fx-font-size: 13px;" text="Select Scholar:" />
+                    <ComboBox fx:id="gradeStudentCombo" prefWidth="320"
+                              style="-fx-background-color: #1a1614; -fx-border-color: #2d251f; -fx-border-radius: 4; -fx-text-fill: #a8a29e; -fx-font-size: 13px;" />
+                </HBox>
+
+                <TableView fx:id="gradesAdminTable" styleClass="table-view" VBox.vgrow="ALWAYS" style="-fx-pref-height: 280px;">
+                    <columns>
+                        <TableColumn fx:id="gColCourse"   text="Course"   prefWidth="240" />
+                        <TableColumn fx:id="gColScore"    text="Score"    prefWidth="90" />
+                        <TableColumn fx:id="gColLetter"   text="Grade"    prefWidth="70" />
+                        <TableColumn fx:id="gColSemester" text="Semester" prefWidth="120" />
+                    </columns>
+                    <placeholder><Label text="Select a scholar to view grades." /></placeholder>
+                </TableView>
+
+                <Region prefHeight="16" />
+                <VBox styleClass="card" spacing="14">
+                    <Label style="-fx-font-size: 10px; -fx-text-fill: #6b645c; -fx-font-weight: 600;" text="ADD GRADE" />
+                    <HBox spacing="12">
+                        <VBox spacing="5" HBox.hgrow="ALWAYS">
+                            <Label styleClass="login-label" text="Course" />
+                            <ComboBox fx:id="gradeCourseCombo" maxWidth="1.7976931348623157E308"
+                                      style="-fx-background-color: #13110E; -fx-border-color: #2d251f; -fx-border-radius: 4; -fx-text-fill: #a8a29e; -fx-font-size: 12px;" />
+                        </VBox>
+                        <VBox spacing="5" style="-fx-min-width: 100;">
+                            <Label styleClass="login-label" text="Score (0–100)" />
+                            <TextField fx:id="gradeScoreField" styleClass="login-field" promptText="e.g. 87.5" maxWidth="1.7976931348623157E308" />
+                        </VBox>
+                        <VBox spacing="5" style="-fx-min-width: 120;">
+                            <Label styleClass="login-label" text="Semester" />
+                            <TextField fx:id="gradeSemesterField" styleClass="login-field" promptText="Spring 2026" maxWidth="1.7976931348623157E308" />
+                        </VBox>
+                    </HBox>
+                    <HBox alignment="CENTER_RIGHT" spacing="12">
+                        <Label fx:id="gradesStatusLabel" style="-fx-text-fill: #6dbf8a; -fx-font-size: 12px;" text="" />
+                        <Region HBox.hgrow="ALWAYS" />
+                        <Button text="Delete Selected" mnemonicParsing="false" onAction="#handleDeleteGrade"
+                                style="-fx-background-color: #4a1a1a; -fx-border-color: #8b2020; -fx-border-radius: 5; -fx-background-radius: 5; -fx-text-fill: #e66777; -fx-font-size: 13px; -fx-padding: 8 16; -fx-cursor: hand;" />
+                        <Button text="Add Grade" mnemonicParsing="false" onAction="#handleAddGrade"
+                                styleClass="login-button" style="-fx-padding: 8 20; -fx-font-size: 13px;" />
+                    </HBox>
+                </VBox>
+            </VBox>
+
+            <!-- ═══ ATTENDANCE MANAGEMENT ═══ -->
+            <VBox fx:id="attendanceView" spacing="0" visible="false" managed="false" style="-fx-padding: 30px;">
+                <Label style="-fx-font-family: 'Cinzel'; -fx-font-weight: 700; -fx-font-size: 22px; -fx-text-fill: #d4af37;" text="Hall Presence" />
+                <Label style="-fx-text-fill: #8b847a; -fx-font-size: 13px; -fx-padding: 4 0 16 0;" text="Manage attendance records for each scholar" />
+
+                <HBox alignment="CENTER_LEFT" spacing="12" style="-fx-padding: 0 0 14 0;">
+                    <Label style="-fx-text-fill: #a8a29e; -fx-font-size: 13px;" text="Select Scholar:" />
+                    <ComboBox fx:id="attStudentCombo" prefWidth="320"
+                              style="-fx-background-color: #1a1614; -fx-border-color: #2d251f; -fx-border-radius: 4; -fx-text-fill: #a8a29e; -fx-font-size: 13px;" />
+                </HBox>
+
+                <TableView fx:id="attAdminTable" styleClass="table-view" VBox.vgrow="ALWAYS" style="-fx-pref-height: 280px;">
+                    <columns>
+                        <TableColumn fx:id="aColCourse" text="Course"  prefWidth="240" />
+                        <TableColumn fx:id="aColDate"   text="Date"    prefWidth="120" />
+                        <TableColumn fx:id="aColStatus" text="Status"  prefWidth="100" />
+                    </columns>
+                    <placeholder><Label text="Select a scholar to view attendance." /></placeholder>
+                </TableView>
+
+                <Region prefHeight="16" />
+                <VBox styleClass="card" spacing="14">
+                    <Label style="-fx-font-size: 10px; -fx-text-fill: #6b645c; -fx-font-weight: 600;" text="ADD ATTENDANCE RECORD" />
+                    <HBox spacing="12">
+                        <VBox spacing="5" HBox.hgrow="ALWAYS">
+                            <Label styleClass="login-label" text="Course" />
+                            <ComboBox fx:id="attCourseCombo" maxWidth="1.7976931348623157E308"
+                                      style="-fx-background-color: #13110E; -fx-border-color: #2d251f; -fx-border-radius: 4; -fx-text-fill: #a8a29e; -fx-font-size: 12px;" />
+                        </VBox>
+                        <VBox spacing="5" style="-fx-min-width: 150;">
+                            <Label styleClass="login-label" text="Date" />
+                            <DatePicker fx:id="attDatePicker"
+                                        style="-fx-background-color: #13110E; -fx-border-color: #2d251f; -fx-border-radius: 4; -fx-text-fill: #a8a29e; -fx-font-size: 13px;" />
+                        </VBox>
+                        <VBox spacing="5" style="-fx-min-width: 120;">
+                            <Label styleClass="login-label" text="Status" />
+                            <ComboBox fx:id="attStatusCombo" style="-fx-background-color: #13110E; -fx-border-color: #2d251f; -fx-border-radius: 4; -fx-text-fill: #a8a29e; -fx-font-size: 13px; -fx-min-width: 110;" />
+                        </VBox>
+                    </HBox>
+                    <HBox alignment="CENTER_RIGHT" spacing="12">
+                        <Label fx:id="attStatusLabel" style="-fx-text-fill: #6dbf8a; -fx-font-size: 12px;" text="" />
+                        <Region HBox.hgrow="ALWAYS" />
+                        <Button text="Delete Selected" mnemonicParsing="false" onAction="#handleDeleteAttendance"
+                                style="-fx-background-color: #4a1a1a; -fx-border-color: #8b2020; -fx-border-radius: 5; -fx-background-radius: 5; -fx-text-fill: #e66777; -fx-font-size: 13px; -fx-padding: 8 16; -fx-cursor: hand;" />
+                        <Button text="Add Record" mnemonicParsing="false" onAction="#handleAddAttendance"
+                                styleClass="login-button" style="-fx-padding: 8 20; -fx-font-size: 13px;" />
+                    </HBox>
+                </VBox>
+            </VBox>
+
+            <!-- ═══ COURSE ENROLLMENTS ═══ -->
+            <VBox fx:id="enrollmentsView" spacing="0" visible="false" managed="false" style="-fx-padding: 30px;">
+                <Label style="-fx-font-family: 'Cinzel'; -fx-font-weight: 700; -fx-font-size: 22px; -fx-text-fill: #d4af37;" text="Course Enrollments" />
+                <Label style="-fx-text-fill: #8b847a; -fx-font-size: 13px; -fx-padding: 4 0 16 0;" text="Associate scholars with courses in the Sanctum" />
+
+                <HBox alignment="CENTER_LEFT" spacing="12" style="-fx-padding: 0 0 14 0;">
+                    <Label style="-fx-text-fill: #a8a29e; -fx-font-size: 13px;" text="Select Scholar:" />
+                    <ComboBox fx:id="enrollStudentCombo" prefWidth="320"
+                              style="-fx-background-color: #1a1614; -fx-border-color: #2d251f; -fx-border-radius: 4; -fx-text-fill: #a8a29e; -fx-font-size: 13px;" />
+                </HBox>
+
+                <TableView fx:id="enrollTable" styleClass="table-view" VBox.vgrow="ALWAYS" style="-fx-pref-height: 280px;">
+                    <columns>
+                        <TableColumn fx:id="eColId"         text="Course ID"   prefWidth="100" />
+                        <TableColumn fx:id="eColName"       text="Course Name" prefWidth="240" />
+                        <TableColumn fx:id="eColInstructor" text="Instructor"  prefWidth="180" />
+                        <TableColumn fx:id="eColCredits"    text="Credits"     prefWidth="80" />
+                        <TableColumn fx:id="eColSemester"   text="Semester"    prefWidth="120" />
+                    </columns>
+                    <placeholder><Label text="Select a scholar to view enrolled courses." /></placeholder>
+                </TableView>
+
+                <Region prefHeight="16" />
+                <VBox styleClass="card" spacing="14">
+                    <Label style="-fx-font-size: 10px; -fx-text-fill: #6b645c; -fx-font-weight: 600;" text="ENROLL SCHOLAR IN COURSE" />
+                    <HBox spacing="12">
+                        <VBox spacing="5" HBox.hgrow="ALWAYS">
+                            <Label styleClass="login-label" text="Course to Enroll" />
+                            <ComboBox fx:id="enrollCourseCombo" maxWidth="1.7976931348623157E308"
+                                      style="-fx-background-color: #13110E; -fx-border-color: #2d251f; -fx-border-radius: 4; -fx-text-fill: #a8a29e; -fx-font-size: 12px;" />
+                        </VBox>
+                    </HBox>
+                    <HBox alignment="CENTER_RIGHT" spacing="12">
+                        <Label fx:id="enrollStatusLabel" style="-fx-text-fill: #6dbf8a; -fx-font-size: 12px;" text="" />
+                        <Region HBox.hgrow="ALWAYS" />
+                        <Button text="Remove Selected Enrollment" mnemonicParsing="false" onAction="#handleDeleteEnrollment"
+                                style="-fx-background-color: #4a1a1a; -fx-border-color: #8b2020; -fx-border-radius: 5; -fx-background-radius: 5; -fx-text-fill: #e66777; -fx-font-size: 13px; -fx-padding: 8 16; -fx-cursor: hand;" />
+                        <Button text="Enroll Scholar" mnemonicParsing="false" onAction="#handleEnrollStudent"
+                                styleClass="login-button" style="-fx-padding: 8 20; -fx-font-size: 13px;" />
+                    </HBox>
+                </VBox>
+            </VBox>
+
+            <!-- ═══ ADMIN REPORTS ═══ -->
+            <VBox fx:id="adminReportsView" spacing="0" visible="false" managed="false" style="-fx-padding: 30px;">
+                <HBox alignment="CENTER_LEFT">
+                    <VBox spacing="4" HBox.hgrow="ALWAYS">
+                        <Label style="-fx-font-family: 'Cinzel'; -fx-font-weight: 700; -fx-font-size: 22px; -fx-text-fill: #d4af37;" text="Scholar Summaries" />
+                        <Label style="-fx-text-fill: #8b847a; -fx-font-size: 13px;" text="GPA, attendance and standing for all scholars" />
+                    </VBox>
+                    <HBox spacing="10">
+                        <Button text="⟳  Refresh" mnemonicParsing="false" onAction="#handleRefreshReports"
+                                styleClass="action-button" style="-fx-padding: 8 16; -fx-font-size: 13px;" />
+                        <Button text="⬇  Export All CSV" mnemonicParsing="false" onAction="#handleExportAll"
+                                style="-fx-background-color: #1e3a22; -fx-text-fill: #7dd887; -fx-border-color: #2d5a35; -fx-border-radius: 5; -fx-background-radius: 5; -fx-font-size: 13px; -fx-padding: 8 16; -fx-cursor: hand;" />
+                    </HBox>
+                </HBox>
+                <Region prefHeight="20" />
+                <TableView fx:id="summaryTable" styleClass="table-view" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="srColId"      text="Student ID"   prefWidth="100" />
+                        <TableColumn fx:id="srColName"    text="Name"         prefWidth="200" />
+                        <TableColumn fx:id="srColDept"    text="Department"   prefWidth="180" />
+                        <TableColumn fx:id="srColCourses" text="Courses"      prefWidth="80" />
+                        <TableColumn fx:id="srColGpa"     text="GPA"          prefWidth="80" />
+                        <TableColumn fx:id="srColAtt"     text="Attendance"   prefWidth="100" />
+                    </columns>
+                    <placeholder><Label text="No scholar data available." /></placeholder>
+                </TableView>
+            </VBox>
+
+        </StackPane>
+    </center>
+
+</BorderPane>

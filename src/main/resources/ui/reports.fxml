@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<ScrollPane fitToWidth="true" stylesheets="@../css/dashboard.css"
+            style="-fx-background-color: transparent; -fx-background: #13110E;"
+            xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="studenttracker.controller.ReportsController">
+    <content>
+        <VBox spacing="24">
+            <padding><Insets top="36" bottom="40" left="40" right="40"/></padding>
+
+            <!-- Header -->
+            <VBox spacing="4">
+                <Label style="-fx-font-size: 10px; -fx-text-fill: #6b645c; -fx-font-weight: 600;" text="THE CODEX" />
+                <Label styleClass="title-fantasy" text="Semester Report" />
+                <Label styleClass="subtitle-fantasy" text="A full account of your progress through the Sanctum." />
+            </VBox>
+
+            <!-- Student Identity Card -->
+            <HBox spacing="0" style="-fx-background-color: #1a1614; -fx-border-color: #2d251f; -fx-border-radius: 8; -fx-background-radius: 8;">
+                <VBox spacing="6" style="-fx-padding: 20 24; -fx-border-color: transparent #2d251f transparent transparent; -fx-border-width: 0 1 0 0;" HBox.hgrow="ALWAYS">
+                    <Label fx:id="nameLabel" style="-fx-text-fill: #d4af37; -fx-font-family: 'Cinzel'; -fx-font-weight: 700; -fx-font-size: 18px;" text="Scholar Name" />
+                    <HBox spacing="16">
+                        <Label fx:id="departmentLabel" style="-fx-text-fill: #8b847a; -fx-font-size: 12px;" text="Department" />
+                        <Label style="-fx-text-fill: #3d3530;" text="·" />
+                        <Label fx:id="semesterLabel" style="-fx-text-fill: #8b847a; -fx-font-size: 12px;" text="Semester" />
+                    </HBox>
+                </VBox>
+                <!-- Stats row -->
+                <HBox spacing="0">
+                    <VBox alignment="CENTER" spacing="4" style="-fx-padding: 16 24; -fx-border-color: transparent #2d251f transparent transparent; -fx-border-width: 0 1 0 0; -fx-min-width: 90;">
+                        <Label fx:id="gpaLabel" style="-fx-font-family: 'Cinzel'; -fx-font-weight: 700; -fx-font-size: 22px; -fx-text-fill: #d4af37;" text="0.00" />
+                        <Label style="-fx-text-fill: #6b645c; -fx-font-size: 11px;" text="GPA" />
+                    </VBox>
+                    <VBox alignment="CENTER" spacing="4" style="-fx-padding: 16 24; -fx-border-color: transparent #2d251f transparent transparent; -fx-border-width: 0 1 0 0; -fx-min-width: 90;">
+                        <Label fx:id="attendanceLabel" style="-fx-font-family: 'Cinzel'; -fx-font-weight: 700; -fx-font-size: 22px; -fx-text-fill: #d4af37;" text="0%" />
+                        <Label style="-fx-text-fill: #6b645c; -fx-font-size: 11px;" text="Presence" />
+                    </VBox>
+                    <VBox alignment="CENTER" spacing="4" style="-fx-padding: 16 24; -fx-border-color: transparent #2d251f transparent transparent; -fx-border-width: 0 1 0 0; -fx-min-width: 90;">
+                        <Label fx:id="creditsLabel" style="-fx-font-family: 'Cinzel'; -fx-font-weight: 700; -fx-font-size: 22px; -fx-text-fill: #d4af37;" text="0" />
+                        <Label style="-fx-text-fill: #6b645c; -fx-font-size: 11px;" text="Credits" />
+                    </VBox>
+                    <VBox alignment="CENTER" spacing="4" style="-fx-padding: 16 24; -fx-min-width: 120;">
+                        <Label fx:id="standingLabel" style="-fx-text-fill: #7dd887; -fx-font-weight: bold; -fx-font-size: 13px;" text="Good Standing" />
+                        <Label style="-fx-text-fill: #6b645c; -fx-font-size: 11px;" text="Standing" />
+                    </VBox>
+                </HBox>
+            </HBox>
+
+            <!-- Course Breakdown -->
+            <VBox spacing="12">
+                <Label style="-fx-font-size: 10px; -fx-text-fill: #6b645c; -fx-font-weight: 600; -fx-padding: 0 0 4 0;" text="COURSE BREAKDOWN" />
+                <VBox fx:id="courseBreakdownBox" spacing="8">
+                    <Label style="-fx-text-fill: #8b847a;" text="Loading..." />
+                </VBox>
+            </VBox>
+
+            <!-- Warnings -->
+            <VBox spacing="10">
+                <Label style="-fx-font-size: 10px; -fx-text-fill: #6b645c; -fx-font-weight: 600; -fx-padding: 0 0 4 0;" text="DARK OMENS &amp; WARNINGS" />
+                <VBox fx:id="warningsBox" spacing="8">
+                    <Label style="-fx-text-fill: #8b847a;" text="Checking for omens..." />
+                </VBox>
+            </VBox>
+
+            <!-- Export -->
+            <HBox alignment="CENTER_LEFT" spacing="16" style="-fx-padding: 16; -fx-background-color: #1a1614; -fx-border-color: #2d251f; -fx-border-radius: 8; -fx-background-radius: 8;">
+                <VBox spacing="3" HBox.hgrow="ALWAYS">
+                    <Label style="-fx-text-fill: #ffffff; -fx-font-weight: bold; -fx-font-size: 13px;" text="Export Report Scroll" />
+                    <Label style="-fx-text-fill: #6b645c; -fx-font-size: 11px;" text="Save a CSV file of your full semester record to the current directory." />
+                </VBox>
+                <Label fx:id="exportStatusLabel" style="-fx-text-fill: #7dd887; -fx-font-size: 12px;" text="" />
+                <Button text="⬇  Export CSV" mnemonicParsing="false" onAction="#handleExportCSV"
+                        style="-fx-background-color: #1e3a22; -fx-text-fill: #7dd887; -fx-border-color: #2d5a35; -fx-border-radius: 5; -fx-background-radius: 5; -fx-font-size: 13px; -fx-padding: 9 20; -fx-cursor: hand;" />
+            </HBox>
+        </VBox>
+    </content>
+</ScrollPane>

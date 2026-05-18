@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
+
+<StackPane styleClass="root" stylesheets="@../css/login.css"
+           xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="studenttracker.controller.LoginController">
+
+    <Rectangle fill="#1a1614" height="660" width="500" arcWidth="16" arcHeight="16" />
+
+    <VBox alignment="CENTER" spacing="0" maxWidth="440" maxHeight="660">
+        <padding><Insets top="40" bottom="40" left="50" right="50"/></padding>
+
+        <Label styleClass="login-title" text="Scholar's Sanctum" />
+        <Region prefHeight="6" />
+        <Label styleClass="login-subtitle" text="Enter the Sanctum — prove your worth." />
+        <Region prefHeight="28" />
+
+        <!-- Role Toggle -->
+        <HBox spacing="0" alignment="CENTER"
+              style="-fx-background-color: #0A0907; -fx-background-radius: 6px; -fx-border-color: #2d251f; -fx-border-radius: 6px; -fx-padding: 3px;">
+            <Button fx:id="scholarToggle" text="Scholar" maxWidth="1.7976931348623157E308"
+                    styleClass="toggle-active" onAction="#switchToScholar" mnemonicParsing="false"
+                    HBox.hgrow="ALWAYS" />
+            <Button fx:id="wardenToggle" text="Warden" maxWidth="1.7976931348623157E308"
+                    styleClass="toggle-inactive" onAction="#switchToWarden" mnemonicParsing="false"
+                    HBox.hgrow="ALWAYS" />
+        </HBox>
+        <Region prefHeight="28" />
+
+        <Label fx:id="idLabel" styleClass="login-label" text="Student ID" />
+        <Region prefHeight="6" />
+        <TextField fx:id="idField" styleClass="login-field" promptText="e.g. S101"
+                   maxWidth="1.7976931348623157E308" />
+        <Region prefHeight="20" />
+
+        <Label styleClass="login-label" text="Password" />
+        <Region prefHeight="6" />
+        <PasswordField fx:id="passwordField" styleClass="login-field" promptText="Your secret key"
+                       maxWidth="1.7976931348623157E308" />
+        <Region prefHeight="26" />
+
+        <Label fx:id="errorLabel" style="-fx-text-fill: #e66777; -fx-font-size: 12px;" text="" />
+        <Region prefHeight="8" />
+
+        <Button text="Enter the Sanctum" styleClass="login-button"
+                maxWidth="1.7976931348623157E308" onAction="#handleLogin" mnemonicParsing="false" />
+
+        <Region prefHeight="28" />
+        <Label fx:id="hintLabel" style="-fx-text-fill: #4a4340; -fx-font-size: 11px;" text="Scholar: S101 / 1234" />
+        <Region prefHeight="6" />
+        <Label style="-fx-text-fill: #8b847a; -fx-font-size: 11px;" text="Scholar's Sanctum — Student Tracker v1.0" />
+    </VBox>
+</StackPane>
