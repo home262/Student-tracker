@@ -6,84 +6,128 @@
 <?import javafx.scene.control.ProgressIndicator?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextArea?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<!-- We reuse the dashboard.css for global styling -->
-<BorderPane styleClass="root" stylesheets="@../css/dashboard.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="studenttracker.controller.AdvisorController">
-   <!-- The main content area assumes the sidebar is provided by a root layout, but we will make this a full view for simplicity, assuming they swap Center content -->
+<BorderPane styleClass="root" stylesheets="@../css/dashboard.css"
+            xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="studenttracker.controller.AdvisorController">
    <center>
-      <ScrollPane fitToHeight="true" fitToWidth="true" style="-fx-background-color: transparent; -fx-background: #13110E;" BorderPane.alignment="CENTER">
-         <content>
-            <VBox spacing="30.0">
-               <padding>
-                  <Insets bottom="40.0" left="40.0" right="40.0" top="40.0" />
-               </padding>
-               <children>
-                  <!-- Header Area -->
-                  <VBox spacing="5.0">
-                     <children>
-                        <Label styleClass="header-label" text="THE ORACLE" />
-                        <Label styleClass="title-fantasy" text="Consult the AI Advisor" />
-                        <Label styleClass="subtitle-fantasy" text="Speak with the Oracle to understand your true standing and receive a quest for the future." />
-                     </children>
-                  </VBox>
-                  
-                  <HBox spacing="30.0" VBox.vgrow="ALWAYS">
-                     <children>
-                        <!-- Main Chat Area -->
-                        <VBox spacing="20.0" styleClass="card" HBox.hgrow="ALWAYS">
-                           <children>
-                              <HBox alignment="CENTER_LEFT" spacing="10.0">
-                                 <children>
-                                    <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@../assets/icons/placeholder.png" />
-                                       </image>
-                                    </ImageView>
-                                    <Label styleClass="header-label" style="-fx-font-size: 14px; -fx-text-fill: #d4af37;" text="The Oracle Speaks..." />
-                                 </children>
-                              </HBox>
-                              
-                              <StackPane VBox.vgrow="ALWAYS">
-                                 <children>
-                                    <TextArea fx:id="oracleTextArea" editable="false" prefHeight="400.0" style="-fx-control-inner-background: #13110E; -fx-background-color: #13110E; -fx-text-fill: #a8a29e; -fx-font-family: 'Inter', sans-serif; -fx-font-size: 14px; -fx-border-color: #2d251f; -fx-border-radius: 5px; -fx-padding: 10px;" text="The Oracle awaits your inquiry. Press the button below to summon wisdom." wrapText="true" />
-                                    <ProgressIndicator fx:id="loadingIndicator" visible="false" />
-                                 </children>
-                              </StackPane>
-                              
-                              <HBox alignment="CENTER_RIGHT" spacing="15.0">
-                                 <children>
-                                    <Label style="-fx-text-fill: #8b847a; -fx-font-size: 11px;" text="Powered by Gemini AI" />
-                                    <Region HBox.hgrow="ALWAYS" />
-                                    <Button mnemonicParsing="false" onAction="#handleSummonWisdom" style="-fx-background-color: #d4af37; -fx-text-fill: #13110E; -fx-font-weight: bold; -fx-padding: 10px 20px; -fx-background-radius: 5px; -fx-cursor: hand;" text="Summon Wisdom" />
-                                 </children>
-                              </HBox>
-                           </children>
-                        </VBox>
-                        
-                        <!-- Right Info Box -->
-                        <VBox prefWidth="300.0" spacing="20.0">
-                           <children>
-                              <VBox spacing="15.0" styleClass="card">
-                                 <children>
-                                    <Label styleClass="header-label" text="HOW IT WORKS" />
-                                    <Label style="-fx-text-fill: #a8a29e; -fx-font-size: 12px;" text="The Oracle analyzes your Honor (GPA), recent battle scores, and presence rate." wrapText="true" />
-                                    <Label style="-fx-text-fill: #a8a29e; -fx-font-size: 12px;" text="It will weave this data into a personalized scroll, outlining your current path and providing quests to improve your standing." wrapText="true" />
-                                 </children>
-                              </VBox>
-                           </children>
-                        </VBox>
-                     </children>
-                  </HBox>
-               </children>
+      <VBox spacing="0" style="-fx-background-color: #13110E;">
+         <padding><Insets bottom="24" left="32" right="32" top="32" /></padding>
+
+         <!-- ── Header ─────────────────────────────────────────── -->
+         <VBox spacing="4">
+            <Label styleClass="header-label" text="THE ORACLE" />
+            <Label styleClass="title-fantasy" text="Consult the AI Advisor" />
+            <Label styleClass="subtitle-fantasy"
+                   text="Ask the Oracle anything about your studies, or summon a full analysis of your standing." />
+         </VBox>
+
+         <Region prefHeight="20" />
+
+         <!-- ── Main layout: chat + sidebar ────────────────────── -->
+         <HBox spacing="24" VBox.vgrow="ALWAYS">
+
+            <!-- LEFT — chat panel -->
+            <VBox spacing="0" styleClass="card" HBox.hgrow="ALWAYS"
+                  style="-fx-padding: 0; -fx-background-color: #17140f; -fx-border-color: #2d251f; -fx-border-radius: 8; -fx-background-radius: 8;">
+
+               <!-- Chat title bar -->
+               <HBox alignment="CENTER_LEFT" spacing="10"
+                     style="-fx-padding: 14 18 14 18; -fx-border-color: transparent transparent #2d251f transparent; -fx-border-width: 0 0 1 0;">
+                  <Label text="🔮" style="-fx-font-size: 18px;" />
+                  <Label text="The Oracle Speaks" style="-fx-text-fill: #d4af37; -fx-font-weight: bold; -fx-font-size: 14px; -fx-font-family: 'Inter', sans-serif;" />
+                  <Region HBox.hgrow="ALWAYS" />
+                  <ProgressIndicator fx:id="loadingIndicator" prefWidth="20" prefHeight="20" visible="false"
+                                     style="-fx-progress-color: #d4af37;" />
+                  <Label fx:id="statusLabel" style="-fx-text-fill: #8b847a; -fx-font-size: 11px; -fx-font-family: 'Inter', sans-serif;" text="" />
+               </HBox>
+
+               <!-- Message scroll area -->
+               <ScrollPane fx:id="chatScrollPane" fitToWidth="true" VBox.vgrow="ALWAYS"
+                           style="-fx-background-color: transparent; -fx-background: #13110E; -fx-border-color: transparent;"
+                           hbarPolicy="NEVER" vbarPolicy="AS_NEEDED">
+                  <content>
+                     <VBox fx:id="chatBox" spacing="14" style="-fx-background-color: #13110E;">
+                        <padding><Insets bottom="18" left="18" right="18" top="18" /></padding>
+                     </VBox>
+                  </content>
+               </ScrollPane>
+
+               <!-- Input bar -->
+               <HBox spacing="10" alignment="CENTER"
+                     style="-fx-padding: 12 14 12 14; -fx-border-color: #2d251f transparent transparent transparent; -fx-border-width: 1 0 0 0;">
+                  <TextField fx:id="inputField"
+                             promptText="Ask the Oracle anything, or press Summon for a full analysis…"
+                             HBox.hgrow="ALWAYS"
+                             onAction="#handleSend"
+                             style="-fx-background-color: #1e1a16; -fx-border-color: #3a3028; -fx-border-radius: 20; -fx-background-radius: 20; -fx-text-fill: #c9c2b0; -fx-prompt-text-fill: #5a5248; -fx-font-family: 'Inter', sans-serif; -fx-font-size: 13px; -fx-padding: 10 16 10 16;" />
+                  <Button text="Send" onAction="#handleSend" mnemonicParsing="false"
+                          style="-fx-background-color: #3a2d1e; -fx-text-fill: #d4af37; -fx-font-weight: bold; -fx-font-family: 'Inter', sans-serif; -fx-font-size: 13px; -fx-padding: 10 18; -fx-background-radius: 20; -fx-cursor: hand; -fx-border-color: #5a4030; -fx-border-radius: 20;" />
+                  <Button text="Summon Wisdom" onAction="#handleSummonWisdom" mnemonicParsing="false"
+                          style="-fx-background-color: #d4af37; -fx-text-fill: #13110E; -fx-font-weight: bold; -fx-font-family: 'Inter', sans-serif; -fx-font-size: 13px; -fx-padding: 10 18; -fx-background-radius: 20; -fx-cursor: hand;" />
+               </HBox>
             </VBox>
-         </content>
-      </ScrollPane>
+
+            <!-- RIGHT — sidebar -->
+            <VBox prefWidth="270" spacing="16">
+
+               <!-- Suggested questions -->
+               <VBox spacing="10" styleClass="card">
+                  <Label styleClass="header-label" text="SUGGESTED SCROLLS" />
+                  <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false"
+                          text="📊  Analyse my full standing"
+                          onAction="#handleSummonWisdom"
+                          style="-fx-background-color: #1e1a16; -fx-border-color: #3a3028; -fx-border-radius: 6; -fx-background-radius: 6; -fx-text-fill: #a8a29e; -fx-font-family: 'Inter', sans-serif; -fx-font-size: 12px; -fx-padding: 8 12; -fx-cursor: hand; -fx-alignment: CENTER_LEFT;" />
+                  <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false"
+                          text="📚  How can I improve my GPA?"
+                          onAction="#handleSuggest"
+                          style="-fx-background-color: #1e1a16; -fx-border-color: #3a3028; -fx-border-radius: 6; -fx-background-radius: 6; -fx-text-fill: #a8a29e; -fx-font-family: 'Inter', sans-serif; -fx-font-size: 12px; -fx-padding: 8 12; -fx-cursor: hand; -fx-alignment: CENTER_LEFT;" />
+                  <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false"
+                          text="⚠️  What are my dark omens?"
+                          onAction="#handleSuggest"
+                          style="-fx-background-color: #1e1a16; -fx-border-color: #3a3028; -fx-border-radius: 6; -fx-background-radius: 6; -fx-text-fill: #a8a29e; -fx-font-family: 'Inter', sans-serif; -fx-font-size: 12px; -fx-padding: 8 12; -fx-cursor: hand; -fx-alignment: CENTER_LEFT;" />
+                  <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false"
+                          text="🗓️  Give me a study plan"
+                          onAction="#handleSuggest"
+                          style="-fx-background-color: #1e1a16; -fx-border-color: #3a3028; -fx-border-radius: 6; -fx-background-radius: 6; -fx-text-fill: #a8a29e; -fx-font-family: 'Inter', sans-serif; -fx-font-size: 12px; -fx-padding: 8 12; -fx-cursor: hand; -fx-alignment: CENTER_LEFT;" />
+                  <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false"
+                          text="💡  Tips for my weakest course"
+                          onAction="#handleSuggest"
+                          style="-fx-background-color: #1e1a16; -fx-border-color: #3a3028; -fx-border-radius: 6; -fx-background-radius: 6; -fx-text-fill: #a8a29e; -fx-font-family: 'Inter', sans-serif; -fx-font-size: 12px; -fx-padding: 8 12; -fx-cursor: hand; -fx-alignment: CENTER_LEFT;" />
+                  <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false"
+                          text="🎯  Am I on track to graduate?"
+                          onAction="#handleSuggest"
+                          style="-fx-background-color: #1e1a16; -fx-border-color: #3a3028; -fx-border-radius: 6; -fx-background-radius: 6; -fx-text-fill: #a8a29e; -fx-font-family: 'Inter', sans-serif; -fx-font-size: 12px; -fx-padding: 8 12; -fx-cursor: hand; -fx-alignment: CENTER_LEFT;" />
+                  <Button fx:id="btnClearChat" maxWidth="1.7976931348623157E800" mnemonicParsing="false"
+                          text="🗑  Clear conversation"
+                          onAction="#handleClearChat"
+                          style="-fx-background-color: transparent; -fx-border-color: #4a1a1a; -fx-border-radius: 6; -fx-background-radius: 6; -fx-text-fill: #c06050; -fx-font-family: 'Inter', sans-serif; -fx-font-size: 12px; -fx-padding: 8 12; -fx-cursor: hand; -fx-alignment: CENTER_LEFT;" />
+               </VBox>
+
+               <!-- Setup card -->
+               <VBox spacing="10" styleClass="card">
+                  <Label styleClass="header-label" text="⚙  SETUP (FREE)" />
+                  <Label style="-fx-text-fill: #c9a84c; -fx-font-size: 12px; -fx-font-weight: bold;" text="1. Get a free Groq API key" wrapText="true" />
+                  <Label style="-fx-text-fill: #a8a29e; -fx-font-size: 11px;" text="→ console.groq.com" wrapText="true" />
+                  <Label style="-fx-text-fill: #c9a84c; -fx-font-size: 12px; -fx-font-weight: bold;" text="2. Open AIAdvisorService.java" wrapText="true" />
+                  <Label style="-fx-text-fill: #a8a29e; -fx-font-size: 11px;" text="Paste key in GROQ_API_KEY" wrapText="true" />
+                  <Label style="-fx-text-fill: #6dbf8a; -fx-font-size: 11px;" text="✓ Free · No credit card · Global" wrapText="true" />
+               </VBox>
+
+               <!-- Powered by -->
+               <Label style="-fx-text-fill: #4a4540; -fx-font-size: 10px; -fx-font-family: 'Inter', sans-serif;"
+                      text="Powered by Groq · Llama 3.3 70B" />
+            </VBox>
+         </HBox>
+
+         <Region prefHeight="16" />
+      </VBox>
    </center>
 </BorderPane>

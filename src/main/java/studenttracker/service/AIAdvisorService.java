@@ -1,137 +1,257 @@
 package studenttracker.service;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
+
 import studenttracker.model.Attendance;
 import studenttracker.model.Grade;
 import studenttracker.model.Student;
 
-import java.util.*;
-import java.util.concurrent.CompletableFuture;
-import java.util.stream.Collectors;
-
+/**
+ * ╔══════════════════════════════════════════════════════════════════════════╗
+ * ║ SCHOLAR'S SANCTUM — ORACLE AI · Powered by Groq (FREE) ║
+ * ╠══════════════════════════════════════════════════════════════════════════╣
+ * ║ 1. Go to https://console.groq.com ║
+ * ║ 2. Create a free API key (no credit card) ║
+ * ║ 3. Paste it in GROQ_API_KEY below and rebuild ║
+ * ╚══════════════════════════════════════════════════════════════════════════╝
+ */
 public class AIAdvisorService {
+
+    // ── ⚙ PASTE YOUR FREE GROQ KEY HERE ─────────────────────────────────────
+    private static final String GROQ_API_KEY = "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";
+    // ─────────────────────────────────────────────────────────────────────────
+
+    private static final String GROQ_URL = "https://api.groq.com/openai/v1/chat/completions";
+    private static final String GROQ_MODEL = "llama-3.3-70b-versatile";
+
+    // Each entry: {"role":"user"|"assistant", "content":"..."}
+    private final List<String[]> history = new ArrayList<>();
+
+    /** Clears conversation history (called on Clear Chat). */
+    public void clearHistory() {
+        history.clear();
+    }
+
+    // ── Public API ─────────────────────────────────────────────────────────────
+
+    /**
+     * Sends a user message in the context of an ongoing conversation.
+     * The full student academic profile is embedded in the system prompt so
+     * Groq knows the student's data at every turn.
+     *
+     * @param student      The logged-in student.
+     * @param gpa          Pre-calculated GPA.
+     * @param userMessage  The raw text the student typed or selected.
+     * @param fullAnalysis If true, the prompt explicitly asks for a full review.
+     */
+    public CompletableFuture<String> sendMessageAsync(Student student, double gpa,
+            String userMessage, boolean fullAnalysis) {
+
+        return CompletableFuture.supplyAsync(() -> {
+            if (GROQ_API_KEY.equals("YOUR_GROQ_API_KEY_HERE")) {
+                return buildFallbackAdvice(student, gpa) +
+                        "\n\n─────────────────────────────────────" +
+                        "\n⚙  TO ENABLE REAL AI:" +
+                        "\n1. Go to https://console.groq.com" +
+                        "\n2. Create a free API key (no credit card)" +
+                        "\n3. Paste it in AIAdvisorService.java → GROQ_API_KEY" +
+                        "\n4. Rebuild the project";
+            }
+            try {
+                // Add user turn to history
+                history.add(new String[] { "user", userMessage });
+
+                String systemPrompt = buildSystemPrompt(student, gpa, fullAnalysis);
+                String reply = callGroq(systemPrompt);
+
+                // Add assistant turn to history
+                history.add(new String[] { "assistant", reply });
+                return reply;
+            } catch (Exception ex) {
+                history.remove(history.size() - 1); // remove the failed user turn
+                return buildFallbackAdvice(student, gpa)
+                        + "\n\n[Oracle connection failed: " + ex.getMessage() + "]";
+            }
+        });
+    }
+
+    // ── Legacy API kept for compatibility ─────────────────────────────────────
 
     public CompletableFuture<String> getAdviceAsync(Student student, double gpa,
             List<Grade> grades, List<Attendance> attendanceList) {
-        return CompletableFuture.supplyAsync(() -> buildAdvice(student, gpa, grades, attendanceList));
+        return sendMessageAsync(student, gpa,
+                "Give me a full analysis of my academic standing.", true);
     }
 
-    private String buildAdvice(Student student, double gpa,
-            List<Grade> grades, List<Attendance> attendanceList) {
+    // ── System prompt (includes full student data) ─────────────────────────────
 
-        String name = student.getName().split(" ")[0]; // first name
+    private String buildSystemPrompt(Student student, double gpa, boolean fullAnalysis) {
+        String firstName = student.getName().split(" ")[0];
+        StringBuilder profile = new StringBuilder();
+        profile.append("Student name: ").append(student.getName()).append("\n");
+        profile.append("Department: ").append(student.getDepartment()).append("\n");
+        profile.append("GPA: ").append(String.format("%.2f / 4.00", gpa)).append("\n\n");
 
-        // ── GPA analysis ─────────────────────────────────────────────
-        String gpaStatus;
-        String gpaAdvice;
-        if (gpa >= 3.7) {
-            gpaStatus = "Honor Roll";
-            gpaAdvice = "Your Honor score of " + String.format("%.2f", gpa) +
-                " places you among the Sanctum's most celebrated scholars. " +
-                "The ancient tomes record few who shine this brightly. " +
-                "Keep your momentum — the path to mastery is built on consistency.";
-        } else if (gpa >= 3.0) {
-            gpaStatus = "Good Standing";
-            gpaAdvice = "Your Honor score of " + String.format("%.2f", gpa) +
-                " reflects solid dedication to your craft. " +
-                "You stand on firm ground within these halls. " +
-                "A focused push in your weaker quests could elevate you to the Honor Roll.";
-        } else if (gpa >= 2.0) {
-            gpaStatus = "At Risk";
-            gpaAdvice = "Your Honor score of " + String.format("%.2f", gpa) +
-                " signals that your scholarly flame burns dimmer than it should. " +
-                "The Sanctum urges you to seek your instructors' counsel and revisit core materials. " +
-                "Each quest retaken with full effort can reclaim your standing.";
-        } else {
-            gpaStatus = "Critical — Action Required";
-            gpaAdvice = "Your Honor score of " + String.format("%.2f", gpa) +
-                " has drawn the concern of the Sanctum's wardens. " +
-                "Urgent action is required — attend every session, seek tutoring, " +
-                "and communicate with your instructors without delay. " +
-                "The road back is steep, but scholars have walked it before.";
-        }
-
-        // ── Worst courses ─────────────────────────────────────────────
-        String coursesAdvice = "";
+        List<Grade> grades = student.getGrades();
         if (grades != null && !grades.isEmpty()) {
-            List<Grade> sorted = grades.stream()
-                .sorted(Comparator.comparingDouble(Grade::getScore))
-                .collect(Collectors.toList());
-
-            Grade worst = sorted.get(0);
-            String worstName = worst.getCourse() != null ? worst.getCourse().getCourseName() : "an unnamed quest";
-            String worstLetter = worst.calculateLetter();
-
-            if (sorted.size() >= 2) {
-                Grade second = sorted.get(1);
-                String secondName = second.getCourse() != null ? second.getCourse().getCourseName() : "another quest";
-                coursesAdvice = "The scrolls reveal that your most challenging quests are **" + worstName +
-                    "** (Grade: " + worstLetter + ", Score: " + String.format("%.0f", worst.getScore()) + ") " +
-                    "and **" + secondName + "** (Grade: " + second.calculateLetter() +
-                    ", Score: " + String.format("%.0f", second.getScore()) + "). " +
-                    "Dedicate extra hours of study to these disciplines — " +
-                    "request a counsel session with their instructors and form study alliances with your peers.";
-            } else {
-                coursesAdvice = "The scrolls show your most challenging quest is **" + worstName +
-                    "** with a grade of " + worstLetter + " (" + String.format("%.0f", worst.getScore()) + "). " +
-                    "Seek guidance from its instructor and dedicate focused study sessions to mastering it.";
+            profile.append("Grades:\n");
+            for (Grade g : grades) {
+                String cn = g.getCourse() != null ? g.getCourse().getCourseName() : "Unknown";
+                profile.append("  - ").append(cn).append(": ")
+                        .append(g.calculateLetter())
+                        .append(" (").append(String.format("%.0f", g.getScore())).append("%)\n");
             }
         } else {
-            coursesAdvice = "No battle scores have yet been recorded in the archives. " +
-                "Ensure your instructors log your scores so the Oracle may offer wiser counsel next time.";
+            profile.append("Grades: none recorded yet.\n");
         }
 
-        // ── Attendance analysis ───────────────────────────────────────
-        String attendanceAdvice = "";
-        if (attendanceList != null && !attendanceList.isEmpty()) {
-            long absent = attendanceList.stream()
-                .filter(a -> a.getStatus().equalsIgnoreCase("Absent")).count();
-            long total = attendanceList.size();
-            double rate = (double)(total - absent) / total * 100;
-
-            // Per-course absence map
-            Map<String, Long> absencesByCourse = attendanceList.stream()
-                .filter(a -> a.getStatus().equalsIgnoreCase("Absent"))
-                .collect(Collectors.groupingBy(
-                    a -> a.getCourse() != null ? a.getCourse().getCourseName() : "Unknown",
-                    Collectors.counting()));
-
-            List<Map.Entry<String, Long>> atRisk = absencesByCourse.entrySet().stream()
-                .filter(e -> e.getValue() >= 2)
-                .sorted(Map.Entry.<String, Long>comparingByValue().reversed())
-                .collect(Collectors.toList());
-
-            if (rate >= 90) {
-                attendanceAdvice = "Your presence in the halls is exemplary at " +
-                    String.format("%.0f%%", rate) + " — a mark of true dedication. " +
-                    "Consistent attendance is one of the most powerful advantages a scholar can possess. Keep this standard.";
-            } else if (rate >= 75) {
-                attendanceAdvice = "Your hall presence stands at " + String.format("%.0f%%", rate) + ". " +
-                    "While acceptable, there is room to improve. " +
-                    (atRisk.isEmpty() ? "Guard against further absences in all your courses." :
-                        "Pay particular attention to **" + atRisk.get(0).getKey() + "** where " +
-                        atRisk.get(0).getValue() + " absences have been recorded.");
-            } else {
-                attendanceAdvice = "⚠ Dark Omen Alert: Your presence rate of " +
-                    String.format("%.0f%%", rate) + " is below the Sanctum's required 75% threshold. " +
-                    "This endangers your eligibility for final trials. " +
-                    (atRisk.isEmpty() ? "Attend every session without exception going forward." :
-                        "Your most urgent concern is **" + atRisk.get(0).getKey() +
-                        "** with " + atRisk.get(0).getValue() + " absences — " +
-                        "one more may bar you from its final examination.");
-            }
+        List<Attendance> att = student.getAttendanceRecords();
+        if (att != null && !att.isEmpty()) {
+            long absent = att.stream().filter(a -> "Absent".equalsIgnoreCase(a.getStatus())).count();
+            double rate = (double) (att.size() - absent) / att.size() * 100;
+            profile.append("\nAttendance rate: ").append(String.format("%.1f%%", rate)).append("\n");
+            Map<String, Long> absMap = att.stream()
+                    .filter(a -> "Absent".equalsIgnoreCase(a.getStatus()))
+                    .collect(Collectors.groupingBy(
+                            a -> a.getCourse() != null ? a.getCourse().getCourseName() : "Unknown",
+                            Collectors.counting()));
+            absMap.forEach((c, n) -> profile.append("  - ").append(c).append(": ").append(n).append(" absence(s)\n"));
         } else {
-            attendanceAdvice = "No presence records have been entered yet. " +
-                "Once attendance is logged, the Oracle can alert you to any dark omens on your path.";
+            profile.append("\nAttendance: no records yet.\n");
         }
 
-        // ── Build final response ──────────────────────────────────────
-        return "⚔ Oracle's Counsel for Scholar " + name + " [Status: " + gpaStatus + "]\n\n" +
-            "HONOR & STANDING\n" +
-            gpaAdvice + "\n\n" +
-            "QUEST PERFORMANCE\n" +
-            coursesAdvice + "\n\n" +
-            "HALL PRESENCE\n" +
-            attendanceAdvice + "\n\n" +
-            "— The Oracle has spoken. May your quests be victorious, Scholar " + name + ".";
+        String base = "You are the Oracle of Scholar's Sanctum — a wise, mystical academic advisor "
+                + "who speaks in a fantasy RPG style (like a sage wizard), but gives genuinely useful, "
+                + "specific academic advice. Use words like scholar, quests, battles, honor, dark omens, "
+                + "the Sanctum naturally throughout your responses. "
+                + "Be warm, direct, and vary your responses — never repeat the same phrasing twice. "
+                + "When asked the same type of question, approach it from a different angle each time. "
+                + "Use **bold** markers around key terms and course names. Keep responses under 350 words.\n\n"
+                + "Here is the scholar's full academic profile:\n" + profile;
+
+        if (fullAnalysis) {
+            base += "\nThe scholar has requested a FULL ANALYSIS. Cover: GPA status, "
+                    + "best and worst courses, attendance, and 3-5 prioritised action items.";
+        }
+
+        return base;
+    }
+
+    // ── Groq HTTP call with conversation history ───────────────────────────────
+
+    private String callGroq(String systemPrompt) throws Exception {
+        URL url = new URL(GROQ_URL);
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("POST");
+        conn.setRequestProperty("Content-Type", "application/json");
+        conn.setRequestProperty("Authorization", "Bearer " + GROQ_API_KEY);
+        conn.setDoOutput(true);
+        conn.setConnectTimeout(15_000);
+        conn.setReadTimeout(60_000);
+
+        // Build messages array: system + full history
+        StringBuilder messages = new StringBuilder();
+        messages.append("[");
+        messages.append("{\"role\":\"system\",\"content\":\"").append(escapeJson(systemPrompt)).append("\"}");
+        for (String[] turn : history) {
+            messages.append(",{\"role\":\"").append(turn[0]).append("\",\"content\":\"")
+                    .append(escapeJson(turn[1])).append("\"}");
+        }
+        messages.append("]");
+
+        String body = "{\"model\":\"" + GROQ_MODEL + "\","
+                + "\"messages\":" + messages + ","
+                + "\"max_tokens\":900,"
+                + "\"temperature\":0.82}"; // slightly higher temp = more varied responses
+
+        try (OutputStream os = conn.getOutputStream()) {
+            os.write(body.getBytes(StandardCharsets.UTF_8));
+        }
+
+        int status = conn.getResponseCode();
+        InputStream is = (status >= 200 && status < 300)
+                ? conn.getInputStream()
+                : conn.getErrorStream();
+        String response = new String(is.readAllBytes(), StandardCharsets.UTF_8);
+
+        if (status != 200) {
+            String hint = extractJsonString(response, "message");
+            throw new IOException("Groq " + status + ": "
+                    + (hint.isEmpty() ? response.substring(0, Math.min(300, response.length())) : hint));
+        }
+
+        String content = extractJsonString(response, "content");
+        if (content.isEmpty())
+            throw new IOException("Empty response from Groq.");
+        return content;
+    }
+
+    // ── Helpers ────────────────────────────────────────────────────────────────
+
+    private String escapeJson(String s) {
+        return s.replace("\\", "\\\\")
+                .replace("\"", "\\\"")
+                .replace("\n", "\\n")
+                .replace("\r", "");
+    }
+
+    private String extractJsonString(String json, String key) {
+        String marker = "\"" + key + "\":";
+        int ki = json.indexOf(marker);
+        if (ki == -1)
+            return "";
+        int start = json.indexOf('"', ki + marker.length());
+        if (start == -1)
+            return "";
+        start++;
+        StringBuilder sb = new StringBuilder();
+        boolean escape = false;
+        for (int i = start; i < json.length(); i++) {
+            char c = json.charAt(i);
+            if (escape) {
+                switch (c) {
+                    case 'n' -> sb.append('\n');
+                    case 't' -> sb.append('\t');
+                    case '"' -> sb.append('"');
+                    case '\\' -> sb.append('\\');
+                    default -> sb.append(c);
+                }
+                escape = false;
+            } else if (c == '\\') {
+                escape = true;
+            } else if (c == '"') {
+                break;
+            } else {
+                sb.append(c);
+            }
+        }
+        return sb.toString();
+    }
+
+    private String buildFallbackAdvice(Student student, double gpa) {
+        String name = student.getName().split(" ")[0];
+        String gpaLine;
+        if (gpa >= 3.7)
+            gpaLine = "Your Honor score of " + String.format("%.2f", gpa) + " marks you as an elite scholar.";
+        else if (gpa >= 3.0)
+            gpaLine = "Your Honor score of " + String.format("%.2f", gpa) + " reflects solid standing.";
+        else if (gpa >= 2.0)
+            gpaLine = "Your Honor score of " + String.format("%.2f", gpa) + " signals risk — action required.";
+        else
+            gpaLine = "Your Honor score of " + String.format("%.2f", gpa) + " is critical. Seek help now.";
+
+        return "⚔ Oracle's Counsel for Scholar " + name + "\n\n"
+                + "HONOR & STANDING\n" + gpaLine + "\n\n"
+                + "— The Oracle has spoken. May your quests be victorious, Scholar " + name + ".";
     }
 }

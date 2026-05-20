@@ -17,7 +17,7 @@ public class DatabaseManager {
     //  DATABASE CONFIG
     // ═══════════════════════════════════════════════════════════════
 
-    private static final String DB_NAME = "Student-Tracker-Pro";
+    private static final String DB_NAME = "project";
 // abdou samy
     private static final String BASE_URL = "jdbc:mysql://localhost:3306/"
                                          + "?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
@@ -86,11 +86,11 @@ public class DatabaseManager {
 
     // ─────────────────────────────────────────────────────────────
 
-    public void createStudentTable() {
+public void createStudentTable() {
         execute("""
             CREATE TABLE IF NOT EXISTS `students` (
                 `user_id`         INT           NOT NULL AUTO_INCREMENT,
-                `student_id`      VARCHAR(50)   NOT NULL,
+                `student_id`      VARCHAR(50)   NOT NULL UNIQUE, -- ضفنا كلمة UNIQUE هنا عشان يرضى يربط الجداول التانية
                 `name`            VARCHAR(255)  NOT NULL,
                 `email`           VARCHAR(255)  NOT NULL UNIQUE,
                 `password`        VARCHAR(255)  NOT NULL,
@@ -101,7 +101,6 @@ public class DatabaseManager {
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
             """, "students");
     }
-
     public void createCourseTable() {
         execute("""
             CREATE TABLE IF NOT EXISTS `courses` (
