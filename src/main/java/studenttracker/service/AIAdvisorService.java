@@ -28,7 +28,7 @@ import studenttracker.model.Student;
 public class AIAdvisorService {
 
     // ── ⚙ PASTE YOUR FREE GROQ KEY HERE ─────────────────────────────────────
-    private static final String GROQ_API_KEY = "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";
+    private static final String GROQ_API_KEY = "YOUR_GROQ_API_KEY_HERE";
     // ─────────────────────────────────────────────────────────────────────────
 
     private static final String GROQ_URL = "https://api.groq.com/openai/v1/chat/completions";
